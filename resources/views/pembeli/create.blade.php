@@ -36,7 +36,7 @@
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder text-white">Administrator</h6>
                 </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('items') ? 'active' : '' }}" href="{{ url('pembeli.barang.index') }}">
+                        <a class="nav-link {{ Request::is('items') ? 'active' : '' }}" href="{{ url('items') }}">
                             <div
                                 class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                                 <i style="font-size: 1rem;"
@@ -118,97 +118,87 @@
             </div>
         </nav>
 
-        <div class="container-fluid py-3">
-            <div class="card mx-3 mb-4">
-                <div class="card-header pb-0">
-                    <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <h6 class="m-0">Items table</h6>
-                        <p class="text-sm">See all items located in your unit</p>
-                    </div>
-                    <div>
-                        <h6 class="m-0 text-sm">Total number of:</h6>
-                        <p class="d-inline-block me-2 text-sm">Items: {{ $totalItems }}</p>
-                        <p class="d-inline-block text-sm">Brands: {{ $totalBrands }}</p>
-                    </div>
-                    <div class="form-group mb-3">
-                        <form action="{{ route('barang.index') }}" method="GET">
-                        <div class="input-group">
-                            <button class="input-group-text search-icon" type="submit"><i class="fas fa-search"></i></button>
-                            <input class="form-control px-2" name="search" placeholder="Search" type="text" value="{{ request('search') }}">
-                        </div>
-                        </form>
-                    </div>
-                    <div class="ml-auto p-0">
-                        <a href="{{ route('pembeli.barang.create') }}" class="btn bg-gradient-primary">Add Item</a>
-                    </div>
-                    </div>
-                </div>
-                <div class="card-body px-0 pt-0 pb-2">
-                    <div class="table-responsive p-0">
-                    <table class="table align-items-center mb-0">
-                        <thead>
-                        <tr>
-                            <th class="text-secondary text-xxs font-weight-bolder pe-3">ID</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Item</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Brand</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Serial Number</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Stok</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Harga</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($items as $item)
-                        <tr>
-                            <td>
-                            <p class="text-xs font-weight-bold mb-0 ps-3">{{ $item->id }}</p>
-                            </td>
-                            <td>
-                            <div class="d-flex align-items-center">
-                                <img src="{{ asset($item->photo) }}" class="avatar avatar-sm me-3" alt="item-image">
-                                <div class="d-flex flex-column">
-                                <h6 class="mb-0 text-sm">{{ $item->name }}</h6>
-                                <p class="text-xs text-secondary mb-0">{{ $item->jenis }}</p>
-                                </div>
-                            </div>
-                            </td>
-                            <td>
-                            <p class="text-xs font-weight-bold mb-0">{{ $item->brand }}</p>
-                            </td>
-                            <td class="align-middle">
-                            <span class="text-xs font-weight-bold">{{ $item->serial_number }}</span>
-                            </td>
-                            <td class="align-middle">
-                            <span class="text-xs font-weight-bold">{{ $item->stok }}</span>
-                            </td>
-                            <td class="align-middle">
-                            <span class="text-xs font-weight-bold">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
-                            </td>
-                            <td>
-                            <div class="d-flex align-items-center">
-                                <a href="{{ route('pembeli.barang.show', ['item' => $item->id]) }}" class="me-2">
-                                <button type="button" class="btn btn-action btn-info mb-0" title="Show detail about this item">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                </a>
-                                @can('edit_data', $item)
-                                    <a href="{{ route('pembeli.barang.edit', ['item' => $item->id]) }}" class="me-2">
-                                    <button type="button" class="btn btn-action btn-info mb-0" title="Show detail about this item">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    </a>
-                                @endcan
-                            </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
+        <div class="card mx-3 mb-3">
+            <div class="card-header pb-3">
+                <h6 class="m-0">Add New Item</h6>
+                <p class="text-sm mb-0">Easily expand your inventory by adding a new item to your unit.</p>
             </div>
-        </div>            
+            <div class="card-body pt-0">
+                <form method="POST" action="{{ route('barang.store') }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required>
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="brand">Brand</label>
+                                <input type="text" class="form-control @error('brand') is-invalid @enderror" id="brand" name="brand" required>
+                                @error('brand')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="serial_number">Jenis</label>
+                                <input type="text" class="form-control @error('serial_number') is-invalid @enderror" id="jenis" name="jenis">
+                                @error('serial_number')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="serial_number">Serial Number</label>
+                                <input type="text" class="form-control @error('serial_number') is-invalid @enderror" id="serial_number" name="serial_number">
+                                @error('serial_number')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="photo">Photo</label>
+                                <input type="file" class="form-control @error('photo') is-invalid @enderror" id="photo" name="photo" required>
+                                @error('photo')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="quantity">Harga</label>
+                                <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="harga" name="harga" min="1">
+                                @error('quantity')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="quantity">Stok</label>
+                                <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="stok" name="stok" min="1">
+                                @error('quantity')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"></textarea>
+                                <small id="character_count" class="form-text text-muted">Type to check remaining character</small>
+                                @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn bg-gradient-primary me-2">Add Item</button>
+                            <a href="{{ route('barang.index') }}" class="btn bg-gradient-info">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>          
     </main>
 
         <!--   Core JS Files   -->

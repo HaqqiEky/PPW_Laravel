@@ -19,10 +19,8 @@ class SessionsController extends Controller
             'password' => 'required',
         ]);
 
-        $remember = $request->has('rememberMe');
 
         if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
 
             return redirect()->route('dashboard.index')->with(['success' => 'You have successfully logged into the system.']);
         }

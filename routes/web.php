@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
+use App\Http\Controllers\PembeliContoller;
 
 
 /*
@@ -51,4 +52,10 @@ Route::middleware('auth', 'administrator')->group(function () {
 // Rute pembeli
 Route::middleware('auth', 'pembeli')->group(function () {
     Route::get('/Pembeli/Barang', [ItemController::class, 'index'])->name('pembeli.barang.index');
+    Route::get('/Pembeli/Barang/{item}', [ItemController::class, 'show'])->name('pembeli.barang.show');
+    Route::get('/Pembeli/Barang/Create', [ItemController::class, 'create_pembeli'])->name('pembeli.barang.create');
+    Route::post('/Pembeli/Barang/Store', [ItemController::class, 'store_pembeli'])->name('pembeli.barang.store');
+    Route::get('/Pembeli//Barang/Edit/{item}', [PembeliContoller::class, 'edit'])->name('pembeli.barang.edit');
+    Route::put('/Pembeli//Barang/Update/{item}', [PembeliContoller::class, 'update'])->name('pembeli.barang.update');
 });
+

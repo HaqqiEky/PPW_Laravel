@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('stok');  
             $table->string('description', 300);
             $table->string('harga');
+            $table->integer('created_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

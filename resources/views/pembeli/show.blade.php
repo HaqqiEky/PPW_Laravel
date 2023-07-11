@@ -36,7 +36,7 @@
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder text-white">Administrator</h6>
                 </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('items') ? 'active' : '' }}" href="{{ url('pembeli.barang.index') }}">
+                        <a class="nav-link {{ Request::is('items') ? 'active' : '' }}" href="{{ url('items') }}">
                             <div
                                 class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                                 <i style="font-size: 1rem;"
@@ -118,97 +118,41 @@
             </div>
         </nav>
 
-        <div class="container-fluid py-3">
-            <div class="card mx-3 mb-4">
-                <div class="card-header pb-0">
-                    <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <h6 class="m-0">Items table</h6>
-                        <p class="text-sm">See all items located in your unit</p>
+        <div class="card mx-3 mb-4">
+            <div class="card-header pb-0">
+                <h6 class="m-0">Item Detail</h6>
+                <p class="text-sm mb-0">View detail of your item.</p>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="{{ asset($item->photo) }}" alt="Item Photo" class="img-fluid rounded mb-2" style="max-height: 150px; width: auto;"><br>
+                        <h5 class="mb-0 mt-2 d-inline-block">{{ $item->name }}</h5>
+                        <p class="d-inline-block"></p>
+                        <p class="m-0 d-inline-block">(ID: {{ $item->id }})</p>
+                        <p class="m-0">Serial: {{ $item->serial_number }}</p>
                     </div>
-                    <div>
-                        <h6 class="m-0 text-sm">Total number of:</h6>
-                        <p class="d-inline-block me-2 text-sm">Items: {{ $totalItems }}</p>
-                        <p class="d-inline-block text-sm">Brands: {{ $totalBrands }}</p>
+                    <div class="col-md-4">
+                        <p><strong>Jenis:</strong><br> {{ $item->jenis }}</p>
+                        <p><strong>Brand:</strong><br> {{ $item->brand }}</p>
+                        <p><strong>Stok:</strong><br> {{ $item->stok }}</p>
                     </div>
-                    <div class="form-group mb-3">
-                        <form action="{{ route('barang.index') }}" method="GET">
-                        <div class="input-group">
-                            <button class="input-group-text search-icon" type="submit"><i class="fas fa-search"></i></button>
-                            <input class="form-control px-2" name="search" placeholder="Search" type="text" value="{{ request('search') }}">
-                        </div>
-                        </form>
-                    </div>
-                    <div class="ml-auto p-0">
-                        <a href="{{ route('pembeli.barang.create') }}" class="btn bg-gradient-primary">Add Item</a>
-                    </div>
+                    <div class="col-md-4">
+                        <p><strong>harga:</strong><br> Rp. {{ number_format($item->harga, 0, ',', '.') }}</p>
+                        <p><strong>Added at:</strong><br> {{ $item->created_at }}</p>
                     </div>
                 </div>
-                <div class="card-body px-0 pt-0 pb-2">
-                    <div class="table-responsive p-0">
-                    <table class="table align-items-center mb-0">
-                        <thead>
-                        <tr>
-                            <th class="text-secondary text-xxs font-weight-bolder pe-3">ID</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Item</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Brand</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Serial Number</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Stok</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Harga</th>
-                            <th class="text-secondary text-xxs font-weight-bolder px-2">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($items as $item)
-                        <tr>
-                            <td>
-                            <p class="text-xs font-weight-bold mb-0 ps-3">{{ $item->id }}</p>
-                            </td>
-                            <td>
-                            <div class="d-flex align-items-center">
-                                <img src="{{ asset($item->photo) }}" class="avatar avatar-sm me-3" alt="item-image">
-                                <div class="d-flex flex-column">
-                                <h6 class="mb-0 text-sm">{{ $item->name }}</h6>
-                                <p class="text-xs text-secondary mb-0">{{ $item->jenis }}</p>
-                                </div>
-                            </div>
-                            </td>
-                            <td>
-                            <p class="text-xs font-weight-bold mb-0">{{ $item->brand }}</p>
-                            </td>
-                            <td class="align-middle">
-                            <span class="text-xs font-weight-bold">{{ $item->serial_number }}</span>
-                            </td>
-                            <td class="align-middle">
-                            <span class="text-xs font-weight-bold">{{ $item->stok }}</span>
-                            </td>
-                            <td class="align-middle">
-                            <span class="text-xs font-weight-bold">Rp. {{ number_format($item->harga, 0, ',', '.') }}</span>
-                            </td>
-                            <td>
-                            <div class="d-flex align-items-center">
-                                <a href="{{ route('pembeli.barang.show', ['item' => $item->id]) }}" class="me-2">
-                                <button type="button" class="btn btn-action btn-info mb-0" title="Show detail about this item">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                </a>
-                                @can('edit_data', $item)
-                                    <a href="{{ route('pembeli.barang.edit', ['item' => $item->id]) }}" class="me-2">
-                                    <button type="button" class="btn btn-action btn-info mb-0" title="Show detail about this item">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    </a>
-                                @endcan
-                            </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <p><strong>Description:</strong><br> {{ $item->description }}</p>
                     </div>
+                </div>
+                <hr>
+                <div class="col-md-6 mt-4">
+                    <a href="{{ route('barang.index') }}" class="btn bg-gradient-info" id="backButton">Back</a>
                 </div>
             </div>
-        </div>            
+        </div>       
     </main>
 
         <!--   Core JS Files   -->
