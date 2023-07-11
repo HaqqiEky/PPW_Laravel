@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('brand');
             $table->string('jenis');
             $table->string('serial_number');
-            $table->string('photo');  
+            $table->string('photo');
+            $table->string('stok');  
             $table->string('description', 300);
             $table->string('harga');
             $table->timestamps();

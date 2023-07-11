@@ -11,9 +11,6 @@ class RegisterController extends Controller
 {
     public function create()
     {
-        if (auth()->check()) {
-            return redirect('/dashboard');
-        }
         return view('session.register');
     }
 
@@ -27,7 +24,7 @@ class RegisterController extends Controller
             'agreement' => ['accepted']
         ]);
         $attributes['password'] = bcrypt($attributes['password']);
-        $attributes['role'] = 'borrower';
+        $attributes['role'] = 'pembeli';
 
         session()->flash('success', 'Your account has been successfully created. Please enter your email and password to enter into the system.');
         $user = User::create($attributes);

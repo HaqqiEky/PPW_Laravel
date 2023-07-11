@@ -9,9 +9,6 @@ class SessionsController extends Controller
 {
     public function create()
     {
-        if (auth()->check()) {
-            return redirect('/dashboard');
-        }
         return view('session.login-session');
     }
 
@@ -27,7 +24,7 @@ class SessionsController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect('dashboard')->with(['success' => 'You have successfully logged into the system.']);
+            return redirect()->route('dashboard.index')->with(['success' => 'You have successfully logged into the system.']);
         }
 
         return back()->withErrors(['email' => "Your emails or passwords don't match."]);

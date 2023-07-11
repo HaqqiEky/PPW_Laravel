@@ -4,11 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Booking;
-use App\Models\Category;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Item;
-use App\Models\Unit;
-use App\Models\Usage;
 use App\Models\User;
 
 class DatabaseSeeder extends Seeder
@@ -18,8 +16,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            ItemSeeder::class,
+        //$this->call([
+           // ItemSeeder::class,
+    //    ]);
+
+        DB::table('users')->insert([
+            'name' => 'admin',
+            'phone' => '0584016259',
+            'email' => 'admin@example.com',
+            'role' => 'administrator',
+            'password' => Hash::make('password'),
         ]);
     }
 }

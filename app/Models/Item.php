@@ -14,6 +14,7 @@ class Item extends Model
         'name', 
         'brand',
         'jenis',
+        'stok',
         'serial_number', 
         'photo', 
         'description',
