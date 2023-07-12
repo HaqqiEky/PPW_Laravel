@@ -32,23 +32,23 @@ Route::post('/login', [SessionsController::class, 'store'])->name('login.store')
 // Rute logout
 Route::post('/logout', [SessionsController::class, 'destroy'])->name('logout');
 
-// Rute dashboard
 Route::middleware(['auth'])->group(function () {
-    Route::get('/Barang/Table', [ItemController::class, 'index'])->name('dashboard.index');
-});
 
-// Rute Administrator
-Route::middleware('auth', 'administrator')->group(function () {
-    Route::get('/Barang', [ItemController::class, 'index'])->name('barang.index');
+    // Route untuk index item
+    Route::get('/Barang/Table', [ItemController::class, 'index'])->name('barang.index');
+
+    // Route untuk show item
+    Route::get('/Barang/Show/{item}', [ItemController::class, 'show'])->name('barang.show');
+
+    // Route untuk create item
     Route::get('/Barang/Create', [ItemController::class, 'create'])->name('barang.create');
     Route::post('/Barang/Store', [ItemController::class, 'store'])->name('barang.store');
-    Route::get('/Barang/{item}', [ItemController::class, 'show'])->name('barang.show');
+
+    // Route untuk edit item
     Route::get('/Barang/Edit/{item}', [ItemController::class, 'edit'])->name('barang.edit');
     Route::put('/Barang/Update/{item}', [ItemController::class, 'update'])->name('barang.update');
-    Route::delete('/Barang/Delete/{item}', [ItemController::class, 'destroy'])->name('barang.destroy');
+
+    // Route untuk hapus item
+    Route::delete('/Barang/Destroy/{item}', [ItemController::class, 'destroy'])->name('barang.destroy');
 });
 
-// Rute pembeli
-Route::middleware('auth', 'pembeli')->group(function () {
-    Route::get('/Pembeli/Barang', [ItemController::class, 'index'])->name('pembeli.barang.index');
-});

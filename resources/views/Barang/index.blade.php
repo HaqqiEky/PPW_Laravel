@@ -33,7 +33,11 @@
         <div class="collapse navbar-collapse h-auto" id="sidenav-collapse-main">
             <ul class="navbar-nav">
                 <li class="nav-item mt-2">
-                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder text-white">Administrator</h6>
+                    @if (Auth::user()->role == 'administrator')
+                        <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder text-white">Administrator</h6>
+                    @else
+                        <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder text-white">Pembeli</h6>
+                    @endif
                 </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('items') ? 'active' : '' }}" href="{{ url('items') }}">
@@ -139,9 +143,11 @@
                         </div>
                         </form>
                     </div>
+                    @can('create-item')
                     <div class="ml-auto p-0">
-                        <a href="{{ route('barang.create') }}" class="btn bg-gradient-primary">Add Item</a>
+                        <a href=" {{ route('barang.create') }}" class="btn bg-gradient-primary">Add Item</a>
                     </div>
+                    @endcan
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -192,18 +198,23 @@
                                     <i class="fas fa-eye"></i>
                                 </button>
                                 </a>
-                                <a href="{{ route('barang.edit', ['item' => $item->id]) }}">
-                                <button type="button" class="btn btn-action btn-primary mb-0 me-1" title="Edit this item">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </button>
-                                </a>
-                                <form action="{{ route('barang.destroy', ['item' => $item->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-action mb-0 ms-1 btn-danger" title="Delete this item">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                @can('edit-item', $item)
+                                    <a href="{{ route('barang.edit', ['item' => $item->id]) }}">
+                                        <button type="button" class="btn btn-action btn-primary mb-0 me-1" title="Edit this item">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                    </a>
+                                @endcan
+
+                                @can('delete-item', $item)
+                                    <form action="{{ route('barang.destroy', ['item' => $item->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-action mb-0 ms-1 btn-danger" title="Delete this item">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                @endcan
                             </div>
                             </td>
                         </tr>

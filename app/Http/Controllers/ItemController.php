@@ -12,9 +12,6 @@ class ItemController extends Controller
 {
     public function index(Request $request)
     {
-        $user = auth()->user();
-
-        if ($user->can('administrator')) {
 
             $query = Item::query();
             $search = $request->query('search');
@@ -35,29 +32,6 @@ class ItemController extends Controller
             $totalBrands = $items->pluck('brand')->unique()->count();
 
             return view('Barang.index', compact('items', 'totalItems', 'totalBrands'));
-        }
-        else
-        {
-            $query = Item::query();
-            $search = $request->query('search');
-        
-            if ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('id', 'LIKE', '%' . $search . '%')
-                        ->orWhere('name', 'LIKE', '%' . $search . '%')
-                        ->orWhere('jenis', 'LIKE', '%' . $search . '%')
-                        ->orWhere('brand', 'LIKE', '%' . $search . '%')
-                        ->orWhere('stok', 'LIKE', '%' . $search . '%')
-                        ->orWhere('serial_number', 'LIKE', '%' . $search . '%');
-                });
-            }
-
-            $items = $query->get();
-            $totalItems = $items->count();
-            $totalBrands = $items->pluck('brand')->unique()->count();
-
-            return view('pembeli.index', compact('items', 'totalItems', 'totalBrands'));
-        }    
     }
 
     public function show(Item $item) {

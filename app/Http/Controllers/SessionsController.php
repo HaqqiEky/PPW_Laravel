@@ -24,7 +24,7 @@ class SessionsController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->route('dashboard.index')->with(['success' => 'You have successfully logged into the system.']);
+            return redirect()->route('barang.index')->with(['success' => 'You have successfully logged into the system.']);
         }
 
         return back()->withErrors(['email' => "Your emails or passwords don't match."]);
